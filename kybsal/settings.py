@@ -10,7 +10,11 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import socket
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+PRODUCTION = 'cauchy' in socket.gethostname()
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +28,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -38,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'kybsal.slave',
     'kybsal.timer',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -70,18 +75,32 @@ TEMPLATE_DIRS = (
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if not PRODUCTION:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'kyb',                      # Or path to database file if using sqlite3.
+            'USER': 'kyb',
+            'PASSWORD': 'asdqwe123',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+    STATIC_ROOT = '/opt/kybenv/static/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+LOGIN_URL = '/'
 
 TIME_ZONE = 'Europe/Oslo'
 

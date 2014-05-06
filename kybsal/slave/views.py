@@ -25,7 +25,8 @@ def signup_view(request):
 		else:
 			messages.warning(request, "Fyll inn formet riktig!")
 	return redirect(reverse('frontpage'))
-
+	
+@login_required
 def logout_view(request):
 	timer_sjekk_ut(request)
 	auth.logout(request)

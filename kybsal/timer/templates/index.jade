@@ -1,0 +1,16 @@
+extends base
+- load staticfiles
+- load timer_tags
+- load slave_tags
+- block content
+
+.container
+	.row
+		.col-sm-3
+			- show_slave_dashboard
+		.col-sm-9
+			- list_activities activities
+
+
+
+- endblock

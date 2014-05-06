@@ -1,0 +1,33 @@
+from django.shortcuts import render, redirect
+from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import SlaveCreationForm
+from django.core.urlresolvers import reverse
+from kybsal.timer.views import timer_sjekk_ut
+
+def login_view(request):
+	if request.POST:
+		form = AuthenticationForm(data=request.POST)
+		if form.is_valid():
+			auth.login(request, form.get_user())
+	return redirect(reverse('frontpage'))
+
+def signup_view(request):
+	if request.POST:
+		form = SlaveCreationForm(request.POST)
+		if form.is_valid():
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password2']
+			form.save()
+			user = auth.authenticate(username=username, password=password)
+			auth.login(request, user)
+		else:
+			messages.warning(request, "Fyll inn formet riktig!")
+	return redirect(reverse('frontpage'))
+
+def logout_view(request):
+	timer_sjekk_ut(request)
+	auth.logout(request)
+	return redirect(reverse('frontpage'))
+

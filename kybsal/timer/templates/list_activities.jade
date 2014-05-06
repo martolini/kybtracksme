@@ -1,0 +1,10 @@
+div.list-group
+	for activity in activities
+		div.list-group-item
+			.row
+				.col-sm-12
+					blockquote
+						a {{ activity.desc|safe }}
+						span.text-muted.pull-right
+							i.fa.fa-fw.fa-clock-o
+							| {{ activity.time|timesince}} ago

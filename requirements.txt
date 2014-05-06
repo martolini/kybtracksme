@@ -1,0 +1,5 @@
+Django==1.6.4
+pyjade==2.2.0
+pytz==2014.2
+six==1.6.1
+wsgiref==0.1.2

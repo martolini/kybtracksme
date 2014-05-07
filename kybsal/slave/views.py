@@ -43,10 +43,10 @@ def logout_view(request):
 	auth.logout(request)
 	return redirect(reverse('frontpage'))
 
-def profile_view(request, username=False):
-	if username == 'admin':
+def profile_view(request, pk=None):
+	if not pk or pk == 1:
 		return redirect(reverse('frontpage'))
-	slave = get_object_or_404(Slave, username=username)
+	slave = get_object_or_404(Slave, pk=pk)
 	activities = Activity.objects.filter(workday__slave=slave).order_by('-time')[0:10]
 	return render(request, 'slave.jade', {'slave': slave, 'activities': activities})
 

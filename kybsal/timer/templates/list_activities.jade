@@ -4,7 +4,7 @@ div.list-group
 			.row
 				.col-sm-12
 					blockquote
-						a(href="{% url 'slave' activity.workday.slave.username %}") {{ activity.desc|safe }}
+						a(href="{% url 'slave' activity.workday.slave.pk %}") {{ activity.desc|safe }}
 						span.text-muted.pull-right
 							i.fa.fa-fw.fa-clock-o
 							| {{ activity.time|timesince}} ago

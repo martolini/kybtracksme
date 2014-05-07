@@ -14,7 +14,7 @@ extends base
 					for s in slaves
 						.list-group-item
 							blockquote
-								a(href="{% url 'slave' s.username %}") {{ s.get_full_name }}
+								a(href="{% url 'slave' s.pk %}") {{ s.get_full_name }}
 				else
 					.list-group-item
 						blockquote

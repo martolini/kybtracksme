@@ -8,6 +8,15 @@ class Workday(models.Model):
 	checked_out = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
 
+	def save(self, *args, **kwargs):
+		super(Workday, self).save(*args, **kwargs)
+		if self.active:
+			desc = "%s sjekket inn!" % capwords(self.slave.get_full_name())
+		else:
+			desc = "%s sjekket ut!" % capwords(self.slave.get_full_name())
+		Activity(desc=desc, workday=self).save()
+
+
 	def __unicode__(self):
 		return unicode(self.date)
 

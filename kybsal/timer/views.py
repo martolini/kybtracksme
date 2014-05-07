@@ -58,7 +58,6 @@ def timer_sjekk_ut(request):
 def pause_rom(request):
 	breaks = Break.objects.filter(active=True).all()
 	slaves = [b.workday.slave for b in breaks]
-	print slaves
 	return render(request, 'pause.jade', {'slaves': slaves})
 
 

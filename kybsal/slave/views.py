@@ -38,7 +38,7 @@ def search_view(request):
 	
 @login_required
 def logout_view(request):
-	if request.user.get_active_workday:
+	if request.user.get_active_workday():
 		timer_sjekk_ut(request)
 	auth.logout(request)
 	return redirect(reverse('frontpage'))

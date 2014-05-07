@@ -40,22 +40,12 @@ class Slave(AbstractUser):
 		workday = self.get_active_workday()
 		if not workday:
 			return None
-		active_session = workday.sessions.filter(active=True)
-		if len(active_session) > 0:
-			s = active_session[0]
-			s.save()
 		return sum([round((session.ended-session.started).seconds/3600.0,1) for session in workday.sessions.all()])
 
 	def get_todays_total_hours(self):
 		workday = self.get_active_workday()
 		if not workday:
 			return None
-		pause = self.get_active_break()
-		if pause:
-			pause.save()
-		session = self.get_active_session()
-		if session:
-			session.save()
 		sessions, breaks = workday.sessions.all(), workday.breaks.all()
 		alle = chain(sessions, breaks)
 		return sum([round((s.ended-s.started).seconds/3600.0,1) for s in alle])

@@ -8,6 +8,9 @@ class Workday(models.Model):
 	checked_out = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
 
+	def __unicode__(self):
+		return unicode(self.date)
+
 class Break(models.Model):
 	started = models.DateTimeField(auto_now_add=True)
 	ended = models.DateTimeField(auto_now=True)

@@ -23,9 +23,11 @@ html(lang="en")
 				ul.nav.navbar-nav
 					li
 						a(href="{% url 'frontpage' %}") Home
+					li
+						a(href="{% url 'pause_rom' %}") Pauserom
 				ul.nav.navbar-nav.navbar-right
 					li
-						form.navbar-form.navbar-right(action="#", method="POST", style="padding-right: 50px;")
+						form.navbar-form.navbar-right(action="{% url 'search' %}", method="POST", style="padding-right: 50px;")
 							- csrf_token
 							div.form-group
 								input.form-control(name="query", type="text", placeholder="@Search")

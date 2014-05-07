@@ -1,0 +1,26 @@
+extends base
+- load staticfiles
+- load slave_tags
+
+- block content
+
+.container
+	.row
+		.col-sm-3
+			- show_slave_dashboard
+		.col-sm-9
+			.list-group
+				if slaves
+					for s in slaves
+						.list-group-item
+							blockquote
+								a(href="{% url 'slave' s.username %}") {{ s.get_full_name }}
+								span.text-muted.pull-right
+									i.fa-fw.fa-clock-o.fa
+									| since {{ s.get_active_break.started|timesince }} ago
+				else
+					.list-group-item
+						blockquote
+							a Ingen har pause nå :-(
+
+- endblock

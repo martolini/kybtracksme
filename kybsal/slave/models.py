@@ -16,6 +16,12 @@ class Slave(AbstractUser):
 				return 1
 		return 0
 
+	def get_active_break(self):
+		breaks = Break.objects.filter(workday__slave=self, active=True)
+		if len(breaks) > 0:
+			return breaks[0]
+		return None
+
 	def get_todays_effective_hours(self):
 		workday = self.workdays.filter(active=True)
 		if len(workday) == 0:

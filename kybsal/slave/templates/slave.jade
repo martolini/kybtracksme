@@ -1,0 +1,31 @@
+extends base
+- load staticfiles
+- load timer_tags
+- load slave_tags
+
+- block content
+
+.container
+	.row
+		.col-sm-3
+			- show_slave_dashboard
+		.col-sm-9
+			.well
+				center
+					img(src="{% static 'img/no-img.png' %}", width="140", height="140", class="img-circle")
+					br
+					span.lead {{ slave.get_full_name }}
+				hr
+				p
+					| Effektive timer idag:
+					span.pull-right.text-success {{ slave.get_todays_effective_hours }}
+				p
+					| Totale timer idag:
+					span.pull-right.text-warning {{ slave.get_todays_total_hours }}
+				p
+					| Totale timer på sal
+					span.pull-right.text-info {{ slave.get_total_hours }}
+
+			- list_activities activities
+
+- endblock

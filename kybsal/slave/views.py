@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SlaveCreationForm
+from .models import Slave
+from kybsal.timer.models import Activity
 from django.core.urlresolvers import reverse
 from kybsal.timer.views import timer_sjekk_ut
 
@@ -31,4 +33,9 @@ def logout_view(request):
 	timer_sjekk_ut(request)
 	auth.logout(request)
 	return redirect(reverse('frontpage'))
+
+def profile_view(request, username=False):
+	slave = get_object_or_404(Slave, username=username)
+	activities = Activity.objects.filter(workday__slave=slave).order_by('-time')[0:10]
+	return render(request, 'slave.jade', {'slave': slave, 'activities': activities})
 

@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def frontpage(request):
-	activities = Activity.objects.all().order_by('-time')
+	activities = Activity.objects.all().order_by('-time')[0:10]
 	return render(request, 'index.jade', {'activities': activities})
 	
 @login_required

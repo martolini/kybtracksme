@@ -1,4 +1,5 @@
 from django.db import models
+from string import capwords
 
 class Workday(models.Model):
 	slave = models.ForeignKey('slave.Slave', related_name="workdays")
@@ -16,9 +17,9 @@ class Break(models.Model):
 	def save(self, *args, **kwargs):
 		super(Break, self).save(*args, **kwargs)
 		if self.active:
-			desc = "%s tok en pause!" % self.workday.slave.get_full_name()
+			desc = "%s tok en pause!" % capwords(self.workday.slave.get_full_name())
 		else:
-			desc = "%s er ferdig med pausa!" % self.workday.slave.get_full_name()
+			desc = "%s er ferdig med pausa!" % capwords(self.workday.slave.get_full_name())
 		Activity(desc=desc, workday=self.workday).save()
 
 

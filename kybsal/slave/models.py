@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from kybsal.timer.models import Workday, Session, Break
 from datetime import datetime
+from itertools import chain
+
 
 
 class Slave(AbstractUser):
@@ -16,17 +18,28 @@ class Slave(AbstractUser):
 				return 1
 		return 0
 
+	def get_active_workday(self):
+		workday = self.workdays.filter(active=True)
+		if len(workday) == 0:
+			return None
+		return workday[0]
+
 	def get_active_break(self):
 		breaks = Break.objects.filter(workday__slave=self, active=True)
 		if len(breaks) > 0:
 			return breaks[0]
 		return None
 
+	def get_active_session(self):
+		sessions = Session.objects.filter(workday__slave=self, active=True)
+		if len(sessions) > 0:
+			return sessions[0]
+		return None
+
 	def get_todays_effective_hours(self):
-		workday = self.workdays.filter(active=True)
-		if len(workday) == 0:
-			return 0
-		workday = workday[0]
+		workday = self.get_active_workday()
+		if not workday:
+			return None
 		active_session = workday.sessions.filter(active=True)
 		if len(active_session) > 0:
 			s = active_session[0]
@@ -34,15 +47,24 @@ class Slave(AbstractUser):
 		return sum([round((session.ended-session.started).seconds/3600.0,1) for session in workday.sessions.all()])
 
 	def get_todays_total_hours(self):
-		workday = self.workdays.filter(active=True)
-		if len(workday) == 0:
-			return 0
-		workday = workday[0]
-		workday.save()
-		return round((workday.checked_out-workday.checked_in).seconds/3600.0,1)
+		workday = self.get_active_workday()
+		if not workday:
+			return None
+		pause = self.get_active_break()
+		if pause:
+			pause.save()
+		session = self.get_active_session()
+		if session:
+			session.save()
+		sessions, breaks = workday.sessions.all(), workday.breaks.all()
+		alle = chain(sessions, breaks)
+		return sum([round((s.ended-s.started).seconds/3600.0,1) for s in alle])
 
 	def get_total_hours(self):
-		active_workday = self.workdays.filter(active=True)
-		if len(active_workday) > 0:
-			active_workday[0].save()
-		return sum([round((workday.checked_out-workday.checked_in).seconds/3600.0,1) for workday in self.workdays.all()])
+		workdays = self.workdays.all()
+		total = 0
+		for workday in workdays:
+			alle = chain(workday.sessions.all(), workday.breaks.all())
+			total += sum([round((s.ended-s.started).seconds/3600.0,1) for s in alle])
+		return total
+

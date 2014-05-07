@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import *
 
+class WorkdayAdmin(admin.ModelAdmin):
+	model = Workday
+	list_display = ('slave', 'date', 'checked_in', 'checked_out')
+
 class BreakAdmin(admin.ModelAdmin):
 	model = Break
 	list_display = ('get_slave', 'workday', 'started', 'ended')
@@ -31,5 +35,5 @@ class SessionAdmin(admin.ModelAdmin):
 
 admin.site.register(Break, BreakAdmin)
 admin.site.register(Session, SessionAdmin)
-admin.site.register(Workday)
+admin.site.register(Workday, WorkdayAdmin)
 admin.site.register(Activity)

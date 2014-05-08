@@ -11,5 +11,6 @@ urlpatterns = patterns('',
     url(r'^search/$', 'kybsal.slave.views.search_view', name='search'),
     url(r'^slave/', include('kybsal.slave.urls')),
     url(r'^timer/', include('kybsal.timer.urls')),
+    url(r'^kontakt/', 'kybsal.contact.views.contact', name='kontakt'),
     url(r'^admin/', include(admin.site.urls)),
 )

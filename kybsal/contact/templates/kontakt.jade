@@ -1,0 +1,29 @@
+extends base
+
+- load staticfiles
+- load bootstrap3
+- load slave_tags
+
+- block content
+.container
+	.row
+		.col-md-3
+			- show_slave_dashboard
+		.col-md-9
+			.panel.panel-default
+				.panel-heading
+					h3.panel-title
+						i.fa.fa-star.fa-fw
+						| &nbsp; Si i fra om noe!
+				.panel-body
+					p.text-muted Her kan du legg eigjen forslag til funksjonalitet, klage på folk som jukser eller bare en koselig hilsen!
+					form(action="{% url 'kontakt' %}", method="POST")
+						- csrf_token
+						- bootstrap_form form
+						- buttons
+						p.text-center
+							button.btn.btn-info.btn-lg.form-submit(type="submit")
+								i.fa.fa-star.fa-fw
+								| SEND
+						- endbuttons
+- endblock

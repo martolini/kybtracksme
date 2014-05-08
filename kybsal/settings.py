@@ -43,6 +43,8 @@ INSTALLED_APPS = (
     'kybsal.slave',
     'kybsal.timer',
     'south',
+    'bootstrap3',
+    'kybsal.contact',
 )
 
 MIDDLEWARE_CLASSES = (

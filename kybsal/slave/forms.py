@@ -29,3 +29,25 @@ class SlaveCreationForm(UserCreationForm):
         except Slave.DoesNotExist:
             return username
         raise forms.ValidationError(self.error_messages['duplicate_username'])
+
+class SlaveChangeForm(forms.ModelForm):
+    new_password = forms.CharField()
+    # new_avatar = forms.ImageField()
+
+    def __init__(self, *args, **kwargs):
+        super(SlaveChangeForm, self).__init__(*args, **kwargs)
+
+        for key in self.fields:
+            self.fields[key].required = False
+
+    def save(self, *args, **kwargs):
+        reader = super(SlaveChangeForm, self).save(commit=False)
+        if self.cleaned_data['new_password']:
+            reader.set_password(self.cleaned_data['new_password'])
+        reader.save()
+        return reader
+
+
+    class Meta(UserChangeForm.Meta):
+        fields = ['first_name', 'last_name', 'new_password']
+        model = Slave

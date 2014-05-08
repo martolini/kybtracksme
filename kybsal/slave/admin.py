@@ -1,8 +1,10 @@
 from django.contrib import admin
 from .models import Slave
+from .forms import SlaveChangeForm
 
 class SlaveAdmin(admin.ModelAdmin):
 	model = Slave
+	form = SlaveChangeForm
 	list_display = ('username', 'first_name', 'last_name','get_total_hours', 'get_todays_hours', 'has_active_workday')
 
 	def get_todays_hours(self, obj):

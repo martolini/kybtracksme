@@ -65,6 +65,7 @@ def profile_view(request, pk=None):
 		data[key]['ineffektive_timer'] = slave.get_ineffective_hours_from_workday(workday)
 		data[key]['totale_timer'] = data[key]['effektive_timer'] + data[key]['ineffektive_timer']
 
+	workday = slave.get_today_workday()
 	effektive_timer = slave.get_effective_hours_from_workday(workday)
 	totale_timer_idag = slave.get_total_hours_from_workday(workday)
 	totale_timer = slave.get_total_hours()

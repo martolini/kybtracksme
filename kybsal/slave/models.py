@@ -46,25 +46,48 @@ class Slave(AbstractUser):
 	def get_effective_hours_from_workday(self, workday):
 		if not workday:
 			return 0
-		return round(sum([(session.ended-session.started).seconds/3600.0 for session in workday.sessions.all()]),1)
+		session = self.get_active_session()
+		hours = 0
+		if session:
+			hours = (timezone.now()-session.started).seconds/3600.0
+		return round(sum([(session.ended-session.started).seconds/3600.0 for session in workday.sessions.filter(active=False)])+hours,1)
 
 	def get_ineffective_hours_from_workday(self, workday):
 		if not workday:
 			return 0
-		return round(sum([(b.ended-b.started).seconds/3600.0 for b in workday.breaks.all()]),1)
+		b = self.get_active_break()
+		hours = 0
+		if b:
+			hours = (timezone.now()-b.started).seconds/3600.0
+		return round(sum([(b.ended-b.started).seconds/3600.0 for b in workday.breaks.filter(active=False)])+hours,1)
 
 	def get_total_hours_from_workday(self, workday):
 		if not workday:
 			return 0
-		sessions, breaks = workday.sessions.all(), workday.breaks.all()
+		now = timezone.now()
+		session = self.get_active_session()
+		hours = 0
+		if session:
+			hours += (now-session.started).seconds/3600.0
+		b = self.get_active_break()
+		if b:
+			hours += (now-b.started).seconds/3600.0
+		sessions, breaks = workday.sessions.filter(active=False), workday.breaks.filter(active=False)
 		alle = chain(sessions, breaks)
-		return round(sum([(s.ended-s.started).seconds/3600.0 for s in alle]),1)
+		return round(sum([(s.ended-s.started).seconds/3600.0 for s in alle])+hours,1)
 
 	def get_total_hours(self):
 		workdays = self.workdays.all()
 		total = 0
+		now = timezone.now()
+		session = self.get_active_session()
+		if session:
+			total += (now-session.started).seconds/3600.0
+		b = self.get_active_break()
+		if b:
+			total += (now-b.started).seconds/3600.0
 		for workday in workdays:
 			alle = chain(workday.sessions.all(), workday.breaks.all())
-			total += round(sum([(s.ended-s.started).seconds/3600.0 for s in alle]),1)
-		return total
+			total += sum([(s.ended-s.started).seconds/3600.0 for s in alle])
+		return round(total,1)
 

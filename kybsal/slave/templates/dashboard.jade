@@ -13,9 +13,10 @@
 			br
 			span(style="font-size: 22px;") Jens Glad Balchen
 		else
-			img(src="{% static 'img/no-img.png' %}", width="100", height="100", class="img-circle")
-			br
-			span(style="font-size: 22px;") {{ user.get_full_name }}
+			a(href="{% url 'slave' user.pk %}")
+				img(src="{% static 'img/no-img.png' %}", width="100", height="100", class="img-circle")
+				br
+				span(style="font-size: 22px;") {{ user.get_full_name }}
 	if user.is_authenticated
 		state = user.get_current_state 
 		.panel-footer

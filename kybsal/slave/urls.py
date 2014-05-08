@@ -10,5 +10,6 @@ urlpatterns = patterns('kybsal.slave.views',
     url(r'^login/$', 'login_view', name='login'),
     url(r'^signup/$', 'signup_view', name='signup'),
     url(r'^logout/$', 'logout_view', name='logout'),
+    url(r'^status/$', 'status', name='status'),
     url(r'^(?P<pk>\d+)/$', 'profile_view', name='slave'),
 )

@@ -79,3 +79,7 @@ def profile_view(request, pk=None):
 		'totale_timer': totale_timer
 		})
 
+def status(request):
+	slaves = Slave.objects.all().exclude(pk=1)
+	return render(request, 'status.jade', {'slaves': slaves})
+

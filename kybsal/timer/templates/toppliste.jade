@@ -1,0 +1,77 @@
+extends base
+- load staticfiles
+- load timer_tags
+- load slave_tags
+- block content
+
+
+.container
+	.row
+		.col-sm-3
+			- show_slave_dashboard
+		.col-sm-9
+			.row
+				.col-sm-4
+					.panel.panel-default
+						.panel-heading
+							h3.panel-title.text-center Totaltoppen
+						.panel-body
+							for slave, timer in totaltopp
+								p 
+									|{{ slave.get_full_name }}
+									span.pull-right.text-success {{ timer }}
+
+				.col-sm-4
+					.panel.panel-default
+						.panel-heading
+							h3.panel-title.text-center Jobbetoppen
+						.panel-body
+							for slave, timer in effektivtopp
+								p 
+									|{{ slave.get_full_name }}
+									span.pull-right.text-success {{ timer }}
+				.col-sm-4
+					.panel.panel-default
+						.panel-heading
+							h3.panel-title.text-center Pausetoppen
+						.panel-body
+							for slave, timer in pausetopp
+								p 
+									|{{ slave.get_full_name }}
+									span.pull-right.text-success {{ timer }}
+			hr
+			.row
+				.col-sm-4
+					.panel.panel-default
+						.panel-heading
+							h3.panel-title.text-center Totalbunn
+						.panel-body
+							for slave, timer in totalbunn
+								p 
+									|{{ slave.get_full_name }}
+									span.pull-right.text-success {{ timer }}
+
+				.col-sm-4
+					.panel.panel-default
+						.panel-heading
+							h3.panel-title.text-center Jobbebunn
+						.panel-body
+							for slave, timer in effektivbunn
+								p 
+									|{{ slave.get_full_name }}
+									span.pull-right.text-success {{ timer }}
+				.col-sm-4
+					.panel.panel-default
+						.panel-heading
+							h3.panel-title.text-center Pausebunn
+						.panel-body
+							for slave, timer in pausebunn
+								p 
+									|{{ slave.get_full_name }}
+									span.pull-right.text-success {{ timer }}
+
+
+
+
+
+- endblock

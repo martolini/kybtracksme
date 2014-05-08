@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from kybsal.timer.models import Workday, Session, Break
-from datetime import datetime
+from datetime import date
 from itertools import chain
+from django.utils import timezone
 
 
 
@@ -24,6 +25,12 @@ class Slave(AbstractUser):
 			return None
 		return workday[0]
 
+	def get_today_workday(self):
+		workday = self.workdays.filter(date=date.today())
+		if not workday:
+			return None
+		return workday[0]
+
 	def get_active_break(self):
 		breaks = Break.objects.filter(workday__slave=self, active=True)
 		if len(breaks) > 0:
@@ -36,25 +43,28 @@ class Slave(AbstractUser):
 			return sessions[0]
 		return None
 
-	def get_todays_effective_hours(self):
-		workday = self.get_active_workday()
+	def get_effective_hours_from_workday(self, workday):
 		if not workday:
-			return None
-		return sum([round((session.ended-session.started).seconds/3600.0,1) for session in workday.sessions.all()])
+			return 0
+		return round(sum([(session.ended-session.started).seconds/3600.0 for session in workday.sessions.all()]),1)
 
-	def get_todays_total_hours(self):
-		workday = self.get_active_workday()
+	def get_ineffective_hours_from_workday(self, workday):
 		if not workday:
-			return None
+			return 0
+		return round(sum([(b.ended-b.started).seconds/3600.0 for b in workday.breaks.all()]),1)
+
+	def get_total_hours_from_workday(self, workday):
+		if not workday:
+			return 0
 		sessions, breaks = workday.sessions.all(), workday.breaks.all()
 		alle = chain(sessions, breaks)
-		return sum([round((s.ended-s.started).seconds/3600.0,1) for s in alle])
+		return round(sum([(s.ended-s.started).seconds/3600.0 for s in alle]),1)
 
 	def get_total_hours(self):
 		workdays = self.workdays.all()
 		total = 0
 		for workday in workdays:
 			alle = chain(workday.sessions.all(), workday.breaks.all())
-			total += sum([round((s.ended-s.started).seconds/3600.0,1) for s in alle])
+			total += round(sum([(s.ended-s.started).seconds/3600.0 for s in alle]),1)
 		return total
 

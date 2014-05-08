@@ -22,9 +22,11 @@ html(lang="en")
 			.navbar-collapse.collapse.navbar-responsive-collapse
 				ul.nav.navbar-nav
 					li
-						a(href="{% url 'frontpage' %}") Home
+						a(href="{% url 'frontpage' %}") Hjem
 					li
 						a(href="{% url 'pause_rom' %}") Pauserom
+					li
+						a(href="{% url 'toppliste' %}") Toppliste
 				ul.nav.navbar-nav.navbar-right
 					li
 						form.navbar-form.navbar-right(action="{% url 'search' %}", method="POST", style="padding-right: 50px;")
@@ -37,7 +39,7 @@ html(lang="en")
 							a(href="{% url 'logout' %}") Logout
 		.container
 			.row
-				.col-lg-11
+				.col-lg-12
 					if messages
 						for message in messages
 							div(class="alert alert-dismissable alert-{{message.tags}}")

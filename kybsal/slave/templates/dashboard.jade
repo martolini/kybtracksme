@@ -82,10 +82,10 @@ else
 		.panel-footer
 			p
 				| Effektive timer idag:
-				span.pull-right.text-success {{ user.get_todays_effective_hours }}
+				span.pull-right.text-success {{ effektive_timer }}
 			p
 				| Totale timer idag:
-				span.pull-right.text-warning {{ user.get_todays_total_hours }}
+				span.pull-right.text-warning {{ totale_timer_idag }}
 			p
 				| Totale timer på sal
-				span.pull-right.text-info {{ user.get_total_hours }}
+				span.pull-right.text-info {{ totale_timer }}

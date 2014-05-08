@@ -8,6 +8,9 @@ from kybsal.timer.models import Activity
 from django.core.urlresolvers import reverse
 from kybsal.timer.views import timer_sjekk_ut
 from django.db.models import Q
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 
 def login_view(request):
 	if request.POST:
@@ -43,10 +46,35 @@ def logout_view(request):
 	auth.logout(request)
 	return redirect(reverse('frontpage'))
 
+
 def profile_view(request, pk=None):
 	if not pk or pk == 1:
 		return redirect(reverse('frontpage'))
 	slave = get_object_or_404(Slave, pk=pk)
 	activities = Activity.objects.filter(workday__slave=slave).order_by('-time')[0:10]
-	return render(request, 'slave.jade', {'slave': slave, 'activities': activities})
+	since = timezone.now()-timedelta(days=7)
+	data = {}
+	for date in range(8):
+		data[since.strftime("%Y-%m-%d")] = {'effektive_timer': 0, 'ineffektive_timer': 0, 'totale_timer': 0}
+		since += timedelta(days=1)
+	since = timezone.now()-timedelta(days=7)
+	workdays = slave.workdays.filter(checked_in__gte=since)
+	for workday in workdays:
+		key = workday.date.strftime("%Y-%m-%d")
+		data[key]['effektive_timer'] = slave.get_effective_hours_from_workday(workday)
+		data[key]['ineffektive_timer'] = slave.get_ineffective_hours_from_workday(workday)
+		data[key]['totale_timer'] = data[key]['effektive_timer'] + data[key]['ineffektive_timer']
+
+	effektive_timer = slave.get_effective_hours_from_workday(workday)
+	totale_timer_idag = slave.get_total_hours_from_workday(workday)
+	totale_timer = slave.get_total_hours()
+
+	return render(request, 'slave.jade', {
+		'slave': slave, 
+		'activities': activities, 
+		'data': data,
+		'effektive_timer': effektive_timer,
+		'totale_timer_idag': totale_timer_idag,
+		'totale_timer': totale_timer
+		})
 

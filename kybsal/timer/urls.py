@@ -11,4 +11,5 @@ urlpatterns = patterns('kybsal.timer.views',
     url(r'^pause/$', 'timer_pause', name='pause'),
     url(r'^sjekk_ut/$', 'timer_sjekk_ut', name='sjekk_ut'),
     url(r'^pauserom/$', 'pause_rom', name='pause_rom'),
+    url(r'^toppliste/$', 'toppliste', name='toppliste'),
 )

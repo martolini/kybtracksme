@@ -3,6 +3,12 @@ extends base
 - load timer_tags
 - load slave_tags
 
+- block include
+script(type="text/javascript", src="{% static 'js/raphael.2.1.0.min.js' %}")
+link(rel='stylesheet', href='http://cdn.oesmith.co.uk/morris-0.4.3.min.css')
+script(type="text/javascript", src='http://cdn.oesmith.co.uk/morris-0.4.3.min.js')
+- endblock
+
 - block content
 
 .container
@@ -18,14 +24,46 @@ extends base
 				hr
 				p
 					| Effektive timer idag:
-					span.pull-right.text-success {{ slave.get_todays_effective_hours }}
+					span.pull-right.text-success {{ effektive_timer }}
 				p
 					| Totale timer idag:
-					span.pull-right.text-warning {{ slave.get_todays_total_hours }}
+					span.pull-right.text-warning {{ totale_timer_idag }}
 				p
 					| Totale timer på sal
-					span.pull-right.text-info {{ slave.get_total_hours }}
+					span.pull-right.text-info {{ totale_timer }}
 
-			- list_activities activities
+			ul.nav.nav-tabs(style="margin-bottom: 15px;")
+				li.active
+					a(href="#aktivitet", data-toggle="tab") Aktivitet
+				li
+					a#stats(href="#statistikk", data-toggle="tab") Statistikk
+			div.tab-content
+				div#aktivitet.tab-pane.fade.active.in
+					- list_activities activities
+				div#statistikk.tab-pane.fade
+					div#thechart(style="height: 250px;")
 
+script(type="text/javascript").
+	$(function () {
+		$('#stats').on('shown.bs.tab', function(e) {
+			show_morris();
+		});
+	});
+	function show_morris() {
+		if (typeof window.mychart == 'undefined') {
+			window.mychart = new Morris.Line({
+				element: 'thechart',
+				data: [
+					{% for k, v in data.items %}
+						{ date: '{{ k|safe }}', effektive_timer: '{{ v.effektive_timer }}', ineffektive_timer: '{{ v.ineffektive_timer }}', totale_timer: '{{ v.totale_timer }}' }{% if not forloop.last %},{% endif %}
+					{% endfor %}
+					],
+				xkey: 'date',
+				xLabels: ['day'],
+				ykeys: ['effektive_timer', 'ineffektive_timer', 'totale_timer'],
+				labels: ['Effektive timer', 'Ineffektive timer', 'Totale timer'],
+				resize: true,
+			});
+		}
+	}
 - endblock

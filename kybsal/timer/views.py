@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import Workday, Break, Session, Activity
+from kybsal.slave.models import Slave
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from datetime import timedelta
+from operator import itemgetter
 
 
 def frontpage(request):
@@ -60,6 +63,40 @@ def pause_rom(request):
 	slaves = [b.workday.slave for b in breaks]
 	return render(request, 'pause.jade', {'slaves': slaves})
 
+def toppliste(request):
+	now = timezone.localtime(timezone.now())
+	start_of_week = now-timedelta(days=now.weekday())
+	weekly_workdays = Workday.objects.filter(date__gte=start_of_week)
+	effektiv_data = {}
+	pause_data = {}
+	total_data = {}
+	for workday in weekly_workdays:
+		if not workday.slave in effektiv_data:
+			effektiv_data[workday.slave] = 0
+		if not workday.slave in pause_data:
+			pause_data[workday.slave] = 0
+		if not workday.slave in total_data:
+			total_data[workday.slave] = 0
+		effektiv_data[workday.slave] += workday.slave.get_effective_hours_from_workday(workday)
+		pause_data[workday.slave] += workday.slave.get_ineffective_hours_from_workday(workday)
+		total_data[workday.slave] += workday.slave.get_total_hours_from_workday(workday)
+	sorted_effektive_data = sorted(effektiv_data.items(), key=itemgetter(1), reverse=True)
+	sorted_pause_data = sorted(pause_data.items(), key=itemgetter(1), reverse=True)
+	sorted_total_data = sorted(total_data.items(), key=itemgetter(1), reverse=True)
+	effektivtopp = sorted_effektive_data[0:3]
+	pausetopp = sorted_pause_data[0:3]
+	totaltopp = sorted_total_data[0:3]
+	effektivbunn = sorted_total_data[-3:][::-1]
+	pausebunn = sorted_pause_data[-3:][::-1]
+	totalbunn = sorted_total_data[-3:][::-1]
+	return render(request, 'toppliste.jade', {
+		'effektivtopp': effektivtopp,
+		'effektivbunn': effektivbunn,
+		'pausetopp': pausetopp,
+		'pausebunn': pausebunn,
+		'totaltopp': totaltopp,
+		'totalbunn': totalbunn,
+		})
 
 
 

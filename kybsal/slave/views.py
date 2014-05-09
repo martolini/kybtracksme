@@ -80,6 +80,6 @@ def profile_view(request, pk=None):
 		})
 
 def status(request):
-	slaves = Slave.objects.all().exclude(pk=1)
+	slaves = sorted(Slave.objects.all().exclude(pk=1), key=lambda x:x.get_current_state(), reverse=True)
 	return render(request, 'status.jade', {'slaves': slaves})
 

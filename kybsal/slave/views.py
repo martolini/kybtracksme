@@ -72,6 +72,7 @@ def profile_view(request, pk=None):
 	data[key]['effektive_timer'] = slave.get_effective_hours(slave.actions.filter(started__range=r))
 	data[key]['ineffektive_timer'] = slave.get_ineffective_hours(slave.actions.filter(started__range=r))
 	data[key]['totale_timer'] = slave.get_total_hours(slave.actions.filter(started__range=r))
+	totale_timer = slave.get_total_hours(slave.actions.all())
 
 	return render(request, 'slave.jade', {
 		'slave': slave, 
@@ -79,7 +80,7 @@ def profile_view(request, pk=None):
 		'data': data,
 		'effektive_timer': data[key]['effektive_timer'],
 		'totale_timer_idag': data[key]['ineffektive_timer'],
-		'totale_timer': data[key]['totale_timer']
+		'totale_timer': totale_timer,
 		})
 
 def status(request):

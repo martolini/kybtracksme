@@ -19,11 +19,11 @@ extends base
 							for slave, timer in effektivtopp
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 								else
 									p 
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 
 				.col-sm-4
@@ -34,11 +34,11 @@ extends base
 							for slave, timer in effektivtopp
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 								else
 									p 
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 										
 				.col-sm-4
@@ -49,11 +49,11 @@ extends base
 							for slave, timer in effektivtopp
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 								else
 									p 
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 			hr
 			.row
@@ -65,11 +65,11 @@ extends base
 							for slave, timer in effektivtopp
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 								else
 									p 
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 
 				.col-sm-4
@@ -80,11 +80,11 @@ extends base
 							for slave, timer in effektivtopp
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 								else
 									p 
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 				.col-sm-4
 					.panel.panel-default
@@ -95,11 +95,11 @@ extends base
 							for slave, timer in effektivtopp
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 								else
 									p 
-										| {{ slave.username }}
+										| {{ slave.get_full_name }}
 										span.pull-right.text-success {{ timer }}
 
 

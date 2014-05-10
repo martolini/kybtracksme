@@ -32,7 +32,6 @@ class Break(models.Model):
 	ended = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
 	workday = models.ForeignKey(Workday, related_name="breaks")
-	today = TodayManager()
 	slave = models.ForeignKey('slave.Slave', related_name='breaks', blank=True, null=True)
 
 	def save(self, *args, **kwargs):
@@ -49,8 +48,6 @@ class Session(models.Model):
 	ended = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
 	workday = models.ForeignKey(Workday, related_name="sessions")
-	objects = models.Manager()
-	today = TodayManager()
 	slave = models.ForeignKey('slave.Slave', related_name='sessions', blank=True, null=True)
 
 class Activity(models.Model):

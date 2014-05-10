@@ -16,7 +16,7 @@ extends base
 						.panel-heading
 							h3.panel-title.text-center Totaltoppen
 						.panel-body
-							for slave, timer in effektivtopp
+							for slave, timer in totaltopp
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
 										| {{ slave.get_full_name }}
@@ -46,7 +46,7 @@ extends base
 						.panel-heading
 							h3.panel-title.text-center Pausetoppen
 						.panel-body
-							for slave, timer in effektivtopp
+							for slave, timer in pausetopp
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
 										| {{ slave.get_full_name }}
@@ -62,7 +62,7 @@ extends base
 						.panel-heading
 							h3.panel-title.text-center Totalbunn
 						.panel-body
-							for slave, timer in effektivtopp
+							for slave, timer in totalbunn
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
 										| {{ slave.get_full_name }}
@@ -77,7 +77,7 @@ extends base
 						.panel-heading
 							h3.panel-title.text-center Jobbebunn
 						.panel-body
-							for slave, timer in effektivtopp
+							for slave, timer in effektivbunn
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
 										| {{ slave.get_full_name }}
@@ -92,7 +92,7 @@ extends base
 							h3.panel-title.text-center 
 								a(onclick="toggle_text();") Pausebunn
 						.panel-body
-							for slave, timer in effektivtopp
+							for slave, timer in pausebunn
 								if forloop.counter > 3
 									p.jobb-result.hidden(style='display: none;')
 										| {{ slave.get_full_name }}

@@ -38,8 +38,14 @@ class ActionAdmin(admin.ModelAdmin):
 	list_display = ('slave', 'action', 'started', 'ended')
 	search_fields = ('slave__username', 'slave__first_name', 'slave__last_name')
 
+class FeedItemAdmin(admin.ModelAdmin):
+	model = FeedItem
+	list_display = ('desc', 'created')
+	search_fields = ('slave__username', 'slave__first_name', 'slave__last_name')
+
 admin.site.register(Break, BreakAdmin)
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Workday, WorkdayAdmin)
 admin.site.register(Activity)
 admin.site.register(Action, ActionAdmin)
+admin.site.register(FeedItem, FeedItemAdmin)

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SlaveCreationForm
 from .models import Slave
-from kybsal.timer.models import Activity
+from kybsal.timer.models import Activity, FeedItem
 from django.core.urlresolvers import reverse
 from kybsal.timer.views import timer_sjekk_ut
 from django.db.models import Q
@@ -41,45 +41,48 @@ def search_view(request):
 	
 @login_required
 def logout_view(request):
-	if request.user.get_active_workday():
-		timer_sjekk_ut(request)
+	current_action = request.user.get_current_action()
+	if current_action:
+		current_action.end()
 	auth.logout(request)
 	return redirect(reverse('frontpage'))
 
 
 def profile_view(request, pk=None):
-	if not pk or pk == 1:
-		return redirect(reverse('frontpage'))
 	slave = get_object_or_404(Slave, pk=pk)
-	activities = Activity.objects.filter(workday__slave=slave).order_by('-time')[0:10]
-	since = timezone.now()-timedelta(days=7)
+	feed = FeedItem.objects.filter(slave=slave).order_by('-created')[0:10]
 	data = {}
-	for date in range(8):
-		data[since.strftime("%Y-%m-%d")] = {'effektive_timer': 0, 'ineffektive_timer': 0, 'totale_timer': 0}
+	now = timezone.localtime(timezone.now())
+	since = timezone.localtime(timezone.now())-timedelta(days=7)
+	for date in range(7):
+		key = since.strftime("%Y-%m-%d")
+		data[key] = {}
+		start = since-timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
+		end = since+timedelta(hours=23-now.hour, minutes=59-now.minute, seconds=59-now.second)
+		r = [start, end]
+		data[key]['effektive_timer'] = slave.get_effective_hours(slave.actions.filter(started__range=r))
+		data[key]['ineffektive_timer'] = slave.get_ineffective_hours(slave.actions.filter(started__range=r))
+		data[key]['totale_timer'] = slave.get_total_hours(slave.actions.filter(started__range=r))
 		since += timedelta(days=1)
-	since = timezone.now()-timedelta(days=7)
-	workdays = slave.workdays.filter(checked_in__gte=since)
-	for workday in workdays:
-		key = workday.date.strftime("%Y-%m-%d")
-		data[key]['effektive_timer'] = slave.get_effective_hours_from_workday(workday)
-		data[key]['ineffektive_timer'] = slave.get_ineffective_hours_from_workday(workday)
-		data[key]['totale_timer'] = data[key]['effektive_timer'] + data[key]['ineffektive_timer']
-
-	workday = slave.get_today_workday()
-	effektive_timer = slave.get_effective_hours_from_workday(workday)
-	totale_timer_idag = slave.get_total_hours_from_workday(workday)
-	totale_timer = slave.get_total_hours()
+	key = since.strftime("%Y-%m-%d")
+	start = since-timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
+	end = since+timedelta(hours=23-now.hour, minutes=59-now.minute, seconds=59-now.second)
+	r = [start, end]
+	data[key] = {}
+	data[key]['effektive_timer'] = slave.get_effective_hours(slave.actions.filter(started__range=r))
+	data[key]['ineffektive_timer'] = slave.get_ineffective_hours(slave.actions.filter(started__range=r))
+	data[key]['totale_timer'] = slave.get_total_hours(slave.actions.filter(started__range=r))
 
 	return render(request, 'slave.jade', {
 		'slave': slave, 
-		'activities': activities, 
+		'feed': feed, 
 		'data': data,
-		'effektive_timer': effektive_timer,
-		'totale_timer_idag': totale_timer_idag,
-		'totale_timer': totale_timer
+		'effektive_timer': data[key]['effektive_timer'],
+		'totale_timer_idag': data[key]['ineffektive_timer'],
+		'totale_timer': data[key]['totale_timer']
 		})
 
 def status(request):
-	slaves = sorted(Slave.objects.all().exclude(pk=1), key=lambda x:x.get_current_state(), reverse=True)
+	slaves = sorted(Slave.objects.all(), key=lambda x:x.get_current_state(), reverse=True)
 	return render(request, 'status.jade', {'slaves': slaves})
 

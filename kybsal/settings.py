@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'south',
     'bootstrap3',
     'kybsal.contact',
+    'kybsal.spritz',
 )
 
 MIDDLEWARE_CLASSES = (

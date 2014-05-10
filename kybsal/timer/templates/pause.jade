@@ -17,10 +17,10 @@ extends base
 								a(href="{% url 'slave' s.pk %}") {{ s.get_full_name }}
 								span.text-muted.pull-right
 									i.fa-fw.fa-clock-o.fa
-									| since {{ s.get_active_break.started|timesince }} ago
+									| &nbsp;since {{ s.get_current_action.started|timesince }} ago
 				else
 					.list-group-item
 						blockquote
-							a Ingen har pause nå :-(
+							p.text-warning Ingen har pause nå :-(
 
 - endblock

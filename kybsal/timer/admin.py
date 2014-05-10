@@ -33,7 +33,13 @@ class SessionAdmin(admin.ModelAdmin):
 
 	get_slave.short_description = "Slave"
 
+class ActionAdmin(admin.ModelAdmin):
+	model = Action
+	list_display = ('slave', 'action', 'started', 'ended')
+	search_fields = ('slave__username', 'slave__first_name', 'slave__last_name')
+
 admin.site.register(Break, BreakAdmin)
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Workday, WorkdayAdmin)
 admin.site.register(Activity)
+admin.site.register(Action, ActionAdmin)

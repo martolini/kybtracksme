@@ -1,0 +1,68 @@
+extends base
+
+- load staticfiles
+- load slave_tags
+
+- block include
+link(href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono', rel='stylesheet', type='text/css')
+link(rel="stylesheet", href="{% static 'css/spritz-style.css' %}")
+link(rel="stylesheet", href="{% static 'css/spray-style.css' %}")
+script(type='text/javascript', src="{% static 'js/spray-reader.js' %}")
+- endblock
+
+- block content
+.container
+	.row
+		.col-md-3
+			- show_slave_dashboard
+		.col-md-9
+			.row
+				.col-sm-6
+					#spray_container
+						#guide_top
+							|――――――――――
+							span#notch &#1092;
+							|―――――――――――
+						#spray_result &nbsp;
+						#guide_bottom ――――――――――――――――――――――
+			hr
+			.row
+				.col-sm-6
+					.panel.panel-default
+						.panel-heading
+							h3.panel-title La oss spritze KTN
+						.panel-body
+							.form-group
+								label(for="kapittel") Kapittel
+								select.form-control#kapittel-select
+									for k in kapitler
+										option(value="{{ k.pk }}") {{ k }}
+							.form-group
+								label(for="wpm") WPM
+								select.form-control#wpm
+									wpms = [100,200,300,400,500,600,700]
+									for w in wpms
+										option(value="{{ w }}") {{ w }}
+					button.btn.btn-info#start Start
+
+
+script(type='text/javascript').
+	window.data = {{ data|safe }}
+	var sprayReader = new SprayReader('#spray_result');
+	$(document).ready(function() {
+		$('#start').click(function(event) {
+			var pk = $('#kapittel-select').val()
+			var inputText = window.data[pk];
+			var wpm = $('#wpm').val();
+			sprayReader.setInput(inputText);
+			sprayReader.setWpm(wpm);
+			sprayReader.start();
+			event.preventDefault();
+		});
+
+		$('#stop').click(function(event) {
+			sprayReader.stop();
+			event.preventDefault();
+		});
+	});
+- endblock

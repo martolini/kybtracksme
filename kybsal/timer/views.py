@@ -53,9 +53,9 @@ def pause_rom(request):
 
 def toppliste(request):
 	now = timezone.localtime(timezone.now())
-	start_of_week = now-timedelta(days=now.weekday())
+	start_of_week = now-timedelta(days=now.weekday(), hours=now.hour)
 	effektiv_data, pause_data, total_data = {}, {}, {}
-	for slave in Slave.objects.all():
+	for slave in Slave.objects.all().exclude(pk=1):
 		data = {'effektiv': 0, 'pause': 0}
 		actions = slave.actions.filter(started__gte=start_of_week)
 		effektiv_data[slave] = slave.get_effective_hours(actions)

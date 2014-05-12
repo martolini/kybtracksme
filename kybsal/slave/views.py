@@ -79,7 +79,7 @@ def profile_view(request, pk=None):
 		'feed': feed, 
 		'data': data,
 		'effektive_timer': data[key]['effektive_timer'],
-		'totale_timer_idag': data[key]['ineffektive_timer'],
+		'totale_timer_idag': data[key]['ineffektive_timer']+data[key]['effektive_timer'],
 		'totale_timer': totale_timer,
 		})
 

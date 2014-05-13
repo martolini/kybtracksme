@@ -2,7 +2,7 @@ from django.test import TestCase
 from kybsal.slave.models import Slave
 from django.core.urlresolvers import reverse
 from django.test.client import Client
-from .models import Action
+from .models import Action, FeedItem
 
 
 class TimerTest(TestCase):

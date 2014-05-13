@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'kybsal.contact',
     'kybsal.spritz',
+    'avatar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,6 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'files/media')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "files/static"),

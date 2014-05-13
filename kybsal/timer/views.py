@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Workday, Break, Session, Activity, FeedItem, Action
+from .forms import CreateFeedItemForm
 from kybsal.slave.models import Slave
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -80,6 +81,16 @@ def toppliste(request):
 		'totaltopp': totaltopp,
 		'totalbunn': totalbunn,
 		})
+
+@login_required
+def post_feed(request):
+	if request.POST:
+		form = CreateFeedItemForm(request.POST)
+		if form.is_valid():
+			form.save(request.user)
+		else:
+			print form.errors
+	return redirect(reverse('frontpage'))
 
 
 

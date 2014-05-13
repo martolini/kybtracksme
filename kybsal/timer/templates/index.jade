@@ -10,6 +10,20 @@ extends base
 		.col-sm-3
 			- show_slave_dashboard
 		.col-sm-9
+			.header
+				.panel.panel-info
+					.panel-heading
+						h3.panel-title Skriv noe på veggen
+					.panel-body
+						form(method="POST", action="{% url 'post_feed' %}")
+							- csrf_token
+							div.input-group
+								input.form-control(name="desc", type="text", placeholder="Sjokolade på pauserommet!", required="true")
+								span.input-group-btn
+									if user.is_authenticated
+										button.btn.btn-info(type="submit") Post!
+									else
+										button.btn.btn-info(type="submit", disabled) Post!
 			- list_activities feed
 
 

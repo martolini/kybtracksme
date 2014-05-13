@@ -15,4 +15,13 @@ urlpatterns = patterns('',
     url(r'^kontakt/', 'kybsal.contact.views.contact', name='kontakt'),
     url(r'^spritz/', include('kybsal.spritz.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^avatar/', include('avatar.urls')),
 )
+
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += [
+    # ... the rest of your URLconf goes here ...
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

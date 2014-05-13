@@ -86,6 +86,7 @@ if not PRODUCTION:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'files/media')
 else:
     DATABASES = {
         'default': {
@@ -98,6 +99,7 @@ else:
         }
     }
     STATIC_ROOT = '/opt/kybenv/static/'
+    MEDIA_ROOT = '/opt/kybenv/media'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -120,7 +122,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'files/media')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "files/static"),

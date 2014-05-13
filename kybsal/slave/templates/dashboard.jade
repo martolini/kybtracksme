@@ -14,8 +14,7 @@
 			br
 			span(style="font-size: 22px;") Jens Glad Balchen
 		else
-			a(href="{% url 'avatar_change' %}")
-				img(src="{% avatar_url user 100 %}", width="100", height="100", class="img-circle")
+			img(src="{% static 'img/no-img.png' %}", width="100", height="100", class="img-circle")
 			br
 			a(href="{% url 'slave' user.pk %}")
 				span(style="font-size: 22px;") {{ user.get_full_name }}

@@ -13,7 +13,7 @@ def vedlikehold(request):
 	return render(request, 'vedlikehold.jade')
 
 def frontpage(request):
-	feed = FeedItem.objects.all().order_by('-created')[0:10]
+	feed = FeedItem.objects.all().order_by('-sticky', '-created')[0:10]
 	return render(request, 'index.jade', {'feed': feed})
 	
 @login_required

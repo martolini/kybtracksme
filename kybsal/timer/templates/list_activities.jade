@@ -6,9 +6,9 @@ if feed
 					.col-sm-12
 						blockquote
 							if item.sticky
-								p.text-warning {{ item.desc|safe }}
+								span.text-warning {{ item.desc|safe }}
 							else
 								a(href="{% url 'slave' item.slave.pk %}") {{ item.desc|safe }}
-							span.text-muted.pull-right
-								i.fa.fa-fw.fa-clock-o
-								| {{ item.created|timesince}} ago
+								span.text-muted.pull-right
+									i.fa.fa-fw.fa-clock-o
+									| {{ item.created|timesince}} ago
